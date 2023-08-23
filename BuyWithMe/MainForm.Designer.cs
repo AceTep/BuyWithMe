@@ -29,13 +29,10 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.panel3 = new System.Windows.Forms.Panel();
-            this.panel4 = new System.Windows.Forms.Panel();
             this.ItemPrice = new System.Windows.Forms.TextBox();
             this.ItemName = new System.Windows.Forms.TextBox();
             this.Quantity = new System.Windows.Forms.TextBox();
-            this.checkBox1 = new System.Windows.Forms.CheckBox();
+            this.taxeble = new System.Windows.Forms.CheckBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
@@ -46,11 +43,16 @@
             this.saveList = new System.Windows.Forms.Button();
             this.shareList = new System.Windows.Forms.Button();
             this.closeForm = new System.Windows.Forms.Button();
-            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.panel2 = new System.Windows.Forms.Panel();
+            this.panel3 = new System.Windows.Forms.Panel();
+            this.panel4 = new System.Windows.Forms.Panel();
             this.label2 = new System.Windows.Forms.Label();
-            this.label5 = new System.Windows.Forms.Label();
             this.label6 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
+            this.dataGridView1 = new System.Windows.Forms.DataGridView();
+            this.TaxebleItems = new System.Windows.Forms.Label();
+            this.Subtotal = new System.Windows.Forms.Label();
+            this.TotalItems = new System.Windows.Forms.Label();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panel3.SuspendLayout();
@@ -66,45 +68,14 @@
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.checkBox1);
+            this.panel1.Controls.Add(this.taxeble);
             this.panel1.Controls.Add(this.Quantity);
             this.panel1.Controls.Add(this.ItemName);
             this.panel1.Controls.Add(this.ItemPrice);
             this.panel1.Location = new System.Drawing.Point(12, 12);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(448, 264);
+            this.panel1.Size = new System.Drawing.Size(408, 235);
             this.panel1.TabIndex = 0;
-            // 
-            // panel2
-            // 
-            this.panel2.Controls.Add(this.closeForm);
-            this.panel2.Controls.Add(this.shareList);
-            this.panel2.Controls.Add(this.saveList);
-            this.panel2.Controls.Add(this.loadList);
-            this.panel2.Location = new System.Drawing.Point(12, 282);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(448, 352);
-            this.panel2.TabIndex = 1;
-            // 
-            // panel3
-            // 
-            this.panel3.Controls.Add(this.dataGridView1);
-            this.panel3.Location = new System.Drawing.Point(466, 12);
-            this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(586, 467);
-            this.panel3.TabIndex = 2;
-            this.panel3.Paint += new System.Windows.Forms.PaintEventHandler(this.panel3_Paint);
-            // 
-            // panel4
-            // 
-            this.panel4.Controls.Add(this.label7);
-            this.panel4.Controls.Add(this.label6);
-            this.panel4.Controls.Add(this.label5);
-            this.panel4.Controls.Add(this.label2);
-            this.panel4.Location = new System.Drawing.Point(466, 485);
-            this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(586, 149);
-            this.panel4.TabIndex = 3;
             // 
             // ItemPrice
             // 
@@ -136,17 +107,17 @@
             this.Quantity.TabIndex = 2;
             this.Quantity.TextChanged += new System.EventHandler(this.Quantity_TextChanged);
             // 
-            // checkBox1
+            // taxeble
             // 
-            this.checkBox1.AutoSize = true;
-            this.checkBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.checkBox1.Location = new System.Drawing.Point(123, 119);
-            this.checkBox1.Name = "checkBox1";
-            this.checkBox1.Size = new System.Drawing.Size(107, 21);
-            this.checkBox1.TabIndex = 3;
-            this.checkBox1.Text = "Taxeble item";
-            this.checkBox1.UseVisualStyleBackColor = true;
-            this.checkBox1.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
+            this.taxeble.AutoSize = true;
+            this.taxeble.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.taxeble.Location = new System.Drawing.Point(123, 119);
+            this.taxeble.Name = "taxeble";
+            this.taxeble.Size = new System.Drawing.Size(107, 21);
+            this.taxeble.TabIndex = 3;
+            this.taxeble.Text = "Taxeble item";
+            this.taxeble.UseVisualStyleBackColor = true;
+            this.taxeble.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // label1
             // 
@@ -183,130 +154,192 @@
             // addButton
             // 
             this.addButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addButton.Location = new System.Drawing.Point(45, 177);
+            this.addButton.Location = new System.Drawing.Point(26, 156);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(111, 60);
             this.addButton.TabIndex = 8;
             this.addButton.Text = "Add";
             this.addButton.UseVisualStyleBackColor = true;
+            this.addButton.Click += new System.EventHandler(this.addButton_Click);
             // 
             // removeButton
             // 
             this.removeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.removeButton.Location = new System.Drawing.Point(162, 177);
+            this.removeButton.Location = new System.Drawing.Point(143, 156);
             this.removeButton.Name = "removeButton";
             this.removeButton.Size = new System.Drawing.Size(111, 60);
             this.removeButton.TabIndex = 9;
             this.removeButton.Text = "Remove ";
             this.removeButton.UseVisualStyleBackColor = true;
+            this.removeButton.Click += new System.EventHandler(this.removeButton_Click);
             // 
             // updateButton
             // 
             this.updateButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.updateButton.Location = new System.Drawing.Point(279, 177);
+            this.updateButton.Location = new System.Drawing.Point(260, 156);
             this.updateButton.Name = "updateButton";
             this.updateButton.Size = new System.Drawing.Size(111, 60);
             this.updateButton.TabIndex = 10;
             this.updateButton.Text = "Update";
             this.updateButton.UseVisualStyleBackColor = true;
+            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
             // 
             // loadList
             // 
             this.loadList.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.loadList.Location = new System.Drawing.Point(0, 3);
             this.loadList.Name = "loadList";
-            this.loadList.Size = new System.Drawing.Size(445, 60);
+            this.loadList.Size = new System.Drawing.Size(408, 60);
             this.loadList.TabIndex = 11;
             this.loadList.Text = "Load";
             this.loadList.UseVisualStyleBackColor = true;
+            this.loadList.Click += new System.EventHandler(this.loadList_Click);
             // 
             // saveList
             // 
             this.saveList.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.saveList.Location = new System.Drawing.Point(0, 69);
             this.saveList.Name = "saveList";
-            this.saveList.Size = new System.Drawing.Size(445, 60);
+            this.saveList.Size = new System.Drawing.Size(405, 60);
             this.saveList.TabIndex = 12;
             this.saveList.Text = "Save";
             this.saveList.UseVisualStyleBackColor = true;
+            this.saveList.Click += new System.EventHandler(this.saveList_Click);
             // 
             // shareList
             // 
             this.shareList.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.shareList.Location = new System.Drawing.Point(3, 135);
             this.shareList.Name = "shareList";
-            this.shareList.Size = new System.Drawing.Size(445, 60);
+            this.shareList.Size = new System.Drawing.Size(402, 60);
             this.shareList.TabIndex = 13;
             this.shareList.Text = "Share";
             this.shareList.UseVisualStyleBackColor = true;
+            this.shareList.Click += new System.EventHandler(this.shareList_Click);
             // 
             // closeForm
             // 
             this.closeForm.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.closeForm.Location = new System.Drawing.Point(3, 201);
             this.closeForm.Name = "closeForm";
-            this.closeForm.Size = new System.Drawing.Size(445, 60);
+            this.closeForm.Size = new System.Drawing.Size(402, 60);
             this.closeForm.TabIndex = 14;
             this.closeForm.Text = "Close";
             this.closeForm.UseVisualStyleBackColor = true;
+            this.closeForm.Click += new System.EventHandler(this.closeForm_Click);
+            // 
+            // panel2
+            // 
+            this.panel2.Controls.Add(this.closeForm);
+            this.panel2.Controls.Add(this.shareList);
+            this.panel2.Controls.Add(this.saveList);
+            this.panel2.Controls.Add(this.loadList);
+            this.panel2.Location = new System.Drawing.Point(12, 253);
+            this.panel2.Name = "panel2";
+            this.panel2.Size = new System.Drawing.Size(408, 267);
+            this.panel2.TabIndex = 1;
+            // 
+            // panel3
+            // 
+            this.panel3.Controls.Add(this.dataGridView1);
+            this.panel3.Location = new System.Drawing.Point(426, 12);
+            this.panel3.Name = "panel3";
+            this.panel3.Size = new System.Drawing.Size(499, 348);
+            this.panel3.TabIndex = 2;
+            // 
+            // panel4
+            // 
+            this.panel4.Controls.Add(this.TaxebleItems);
+            this.panel4.Controls.Add(this.Subtotal);
+            this.panel4.Controls.Add(this.TotalItems);
+            this.panel4.Controls.Add(this.label7);
+            this.panel4.Controls.Add(this.label6);
+            this.panel4.Controls.Add(this.label2);
+            this.panel4.Location = new System.Drawing.Point(426, 366);
+            this.panel4.Name = "panel4";
+            this.panel4.Size = new System.Drawing.Size(499, 154);
+            this.panel4.TabIndex = 3;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label2.Location = new System.Drawing.Point(169, 42);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(92, 20);
+            this.label2.TabIndex = 11;
+            this.label2.Text = "Total Items:";
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Location = new System.Drawing.Point(188, 82);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(73, 20);
+            this.label6.TabIndex = 13;
+            this.label6.Text = "Subtotal:";
+            // 
+            // label7
+            // 
+            this.label7.AutoSize = true;
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(149, 62);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(112, 20);
+            this.label7.TabIndex = 14;
+            this.label7.Text = "Taxeble Items:";
             // 
             // dataGridView1
             // 
             this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView1.Location = new System.Drawing.Point(3, 3);
             this.dataGridView1.Name = "dataGridView1";
-            this.dataGridView1.Size = new System.Drawing.Size(580, 461);
+            this.dataGridView1.Size = new System.Drawing.Size(493, 342);
             this.dataGridView1.TabIndex = 0;
             // 
-            // label2
+            // TaxebleItems
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(46, 18);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(95, 20);
-            this.label2.TabIndex = 11;
-            this.label2.Text = "Item Name: ";
+            this.TaxebleItems.AutoSize = true;
+            this.TaxebleItems.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TaxebleItems.Location = new System.Drawing.Point(258, 62);
+            this.TaxebleItems.Name = "TaxebleItems";
+            this.TaxebleItems.Size = new System.Drawing.Size(18, 20);
+            this.TaxebleItems.TabIndex = 17;
+            this.TaxebleItems.Text = "0";
             // 
-            // label5
+            // Subtotal
             // 
-            this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(46, 58);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(95, 20);
-            this.label5.TabIndex = 12;
-            this.label5.Text = "Item Name: ";
+            this.Subtotal.AutoSize = true;
+            this.Subtotal.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Subtotal.Location = new System.Drawing.Point(258, 83);
+            this.Subtotal.Name = "Subtotal";
+            this.Subtotal.Size = new System.Drawing.Size(49, 20);
+            this.Subtotal.TabIndex = 16;
+            this.Subtotal.Text = "€0.00";
             // 
-            // label6
+            // TotalItems
             // 
-            this.label6.AutoSize = true;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(46, 38);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(95, 20);
-            this.label6.TabIndex = 13;
-            this.label6.Text = "Item Name: ";
-            // 
-            // label7
-            // 
-            this.label7.AutoSize = true;
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(46, 78);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(95, 20);
-            this.label7.TabIndex = 14;
-            this.label7.Text = "Item Name: ";
+            this.TotalItems.AutoSize = true;
+            this.TotalItems.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TotalItems.Location = new System.Drawing.Point(258, 42);
+            this.TotalItems.Name = "TotalItems";
+            this.TotalItems.Size = new System.Drawing.Size(18, 20);
+            this.TotalItems.TabIndex = 15;
+            this.TotalItems.Text = "0";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1064, 646);
+            this.ClientSize = new System.Drawing.Size(937, 525);
+            this.ControlBox = false;
             this.Controls.Add(this.panel4);
             this.Controls.Add(this.panel3);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
             this.Name = "MainForm";
             this.Text = "BuyWithMe";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -324,28 +357,30 @@
         #endregion
 
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.Panel panel3;
-        private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.TextBox Quantity;
         private System.Windows.Forms.TextBox ItemName;
         private System.Windows.Forms.TextBox ItemPrice;
-        private System.Windows.Forms.CheckBox checkBox1;
+        private System.Windows.Forms.CheckBox taxeble;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button updateButton;
         private System.Windows.Forms.Button removeButton;
         private System.Windows.Forms.Button addButton;
-        private System.Windows.Forms.Button closeForm;
-        private System.Windows.Forms.Button shareList;
-        private System.Windows.Forms.Button saveList;
         private System.Windows.Forms.Button loadList;
+        private System.Windows.Forms.Button saveList;
+        private System.Windows.Forms.Button shareList;
+        private System.Windows.Forms.Button closeForm;
+        private System.Windows.Forms.Panel panel2;
+        private System.Windows.Forms.Panel panel3;
         private System.Windows.Forms.DataGridView dataGridView1;
+        private System.Windows.Forms.Panel panel4;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label6;
-        private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label TaxebleItems;
+        private System.Windows.Forms.Label Subtotal;
+        private System.Windows.Forms.Label TotalItems;
     }
 }
 
