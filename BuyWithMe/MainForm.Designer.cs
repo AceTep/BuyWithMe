@@ -35,7 +35,6 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.taxeble = new System.Windows.Forms.CheckBox();
             this.ItemQuantity = new System.Windows.Forms.TextBox();
             this.ItemName = new System.Windows.Forms.TextBox();
             this.ItemPrice = new System.Windows.Forms.TextBox();
@@ -68,7 +67,6 @@
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.taxeble);
             this.panel1.Controls.Add(this.ItemQuantity);
             this.panel1.Controls.Add(this.ItemName);
             this.panel1.Controls.Add(this.ItemPrice);
@@ -141,18 +139,6 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "Item Name: ";
             this.label1.Click += new System.EventHandler(this.label1_Click);
-            // 
-            // taxeble
-            // 
-            this.taxeble.AutoSize = true;
-            this.taxeble.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.taxeble.Location = new System.Drawing.Point(123, 119);
-            this.taxeble.Name = "taxeble";
-            this.taxeble.Size = new System.Drawing.Size(107, 21);
-            this.taxeble.TabIndex = 3;
-            this.taxeble.Text = "Taxeble item";
-            this.taxeble.UseVisualStyleBackColor = true;
-            this.taxeble.CheckedChanged += new System.EventHandler(this.checkBox1_CheckedChanged);
             // 
             // ItemQuantity
             // 
@@ -363,7 +349,6 @@
         private System.Windows.Forms.TextBox ItemQuantity;
         private System.Windows.Forms.TextBox ItemName;
         private System.Windows.Forms.TextBox ItemPrice;
-        private System.Windows.Forms.CheckBox taxeble;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;

@@ -30,13 +30,10 @@
         {
             this.panel1 = new System.Windows.Forms.Panel();
             this.updateButton = new System.Windows.Forms.Button();
-            this.removeButton = new System.Windows.Forms.Button();
-            this.addButton = new System.Windows.Forms.Button();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
-            this.taxeble = new System.Windows.Forms.CheckBox();
-            this.Quantity = new System.Windows.Forms.TextBox();
+            this.ItemQuantity = new System.Windows.Forms.TextBox();
             this.ItemName = new System.Windows.Forms.TextBox();
             this.ItemPrice = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
@@ -45,13 +42,10 @@
             // panel1
             // 
             this.panel1.Controls.Add(this.updateButton);
-            this.panel1.Controls.Add(this.removeButton);
-            this.panel1.Controls.Add(this.addButton);
             this.panel1.Controls.Add(this.label4);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.label1);
-            this.panel1.Controls.Add(this.taxeble);
-            this.panel1.Controls.Add(this.Quantity);
+            this.panel1.Controls.Add(this.ItemQuantity);
             this.panel1.Controls.Add(this.ItemName);
             this.panel1.Controls.Add(this.ItemPrice);
             this.panel1.Location = new System.Drawing.Point(12, 12);
@@ -62,32 +56,13 @@
             // updateButton
             // 
             this.updateButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.updateButton.Location = new System.Drawing.Point(260, 156);
+            this.updateButton.Location = new System.Drawing.Point(26, 156);
             this.updateButton.Name = "updateButton";
-            this.updateButton.Size = new System.Drawing.Size(111, 60);
+            this.updateButton.Size = new System.Drawing.Size(345, 60);
             this.updateButton.TabIndex = 10;
             this.updateButton.Text = "Update";
             this.updateButton.UseVisualStyleBackColor = true;
-            // 
-            // removeButton
-            // 
-            this.removeButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.removeButton.Location = new System.Drawing.Point(143, 156);
-            this.removeButton.Name = "removeButton";
-            this.removeButton.Size = new System.Drawing.Size(111, 60);
-            this.removeButton.TabIndex = 9;
-            this.removeButton.Text = "Remove ";
-            this.removeButton.UseVisualStyleBackColor = true;
-            // 
-            // addButton
-            // 
-            this.addButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.addButton.Location = new System.Drawing.Point(26, 156);
-            this.addButton.Name = "addButton";
-            this.addButton.Size = new System.Drawing.Size(111, 60);
-            this.addButton.TabIndex = 8;
-            this.addButton.Text = "Add";
-            this.addButton.UseVisualStyleBackColor = true;
+            this.updateButton.Click += new System.EventHandler(this.updateButton_Click);
             // 
             // label4
             // 
@@ -119,25 +94,14 @@
             this.label1.TabIndex = 4;
             this.label1.Text = "Item Name: ";
             // 
-            // taxeble
+            // ItemQuantity
             // 
-            this.taxeble.AutoSize = true;
-            this.taxeble.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.taxeble.Location = new System.Drawing.Point(123, 119);
-            this.taxeble.Name = "taxeble";
-            this.taxeble.Size = new System.Drawing.Size(107, 21);
-            this.taxeble.TabIndex = 3;
-            this.taxeble.Text = "Taxeble item";
-            this.taxeble.UseVisualStyleBackColor = true;
-            // 
-            // Quantity
-            // 
-            this.Quantity.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Quantity.Location = new System.Drawing.Point(123, 87);
-            this.Quantity.MaxLength = 2;
-            this.Quantity.Name = "Quantity";
-            this.Quantity.Size = new System.Drawing.Size(33, 26);
-            this.Quantity.TabIndex = 2;
+            this.ItemQuantity.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ItemQuantity.Location = new System.Drawing.Point(123, 87);
+            this.ItemQuantity.MaxLength = 2;
+            this.ItemQuantity.Name = "ItemQuantity";
+            this.ItemQuantity.Size = new System.Drawing.Size(33, 26);
+            this.ItemQuantity.TabIndex = 2;
             // 
             // ItemName
             // 
@@ -175,13 +139,10 @@
 
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Button updateButton;
-        private System.Windows.Forms.Button removeButton;
-        private System.Windows.Forms.Button addButton;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.CheckBox taxeble;
-        private System.Windows.Forms.TextBox Quantity;
+        private System.Windows.Forms.TextBox ItemQuantity;
         private System.Windows.Forms.TextBox ItemName;
         private System.Windows.Forms.TextBox ItemPrice;
     }

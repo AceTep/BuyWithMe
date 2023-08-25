@@ -45,8 +45,7 @@ namespace BuyWithMe
 
         private void updateButton_Click(object sender, EventArgs e)
         {
-            //TODO - at the end of all the code above
-            Dao.UpdateRecord();
+          UpdateTableItem();
         }
 
         private void loadList_Click(object sender, EventArgs e)
@@ -122,14 +121,13 @@ namespace BuyWithMe
 
         #region Worker Methods
 
-        private void Initialize() {
+        internal void Initialize() {
             ItemName.Text = "Enter Item";
             ItemPrice.Text = "0.00";
             ItemQuantity.Text = "0";
-            taxeble.Checked = false;
         }
 
-        private  bool AddItems()
+        internal  bool AddItems()
         {
             try
             {
@@ -174,7 +172,6 @@ namespace BuyWithMe
 
                 //taxeble?
 
-                model.Taxable = taxeble.Checked;
 
 
                 #endregion
@@ -193,23 +190,68 @@ namespace BuyWithMe
             }
         }
 
-        private bool RemoveAnItem()
+        internal bool RemoveAnItem()
         {
             bool retVal = true;
 
             try
             {
-                foreach (DataRow row in ItemData.Rows)
-                {
-                    var itemName = row["ItemName"].ToString();
-                    var deleteDecision = MessageBox.Show($"Would you like to remove item {itemName}?", "Delete item?", MessageBoxButtons.YesNo);
+                var selections = dataGridView1.CurrentCell.RowIndex;
 
-                    if (deleteDecision.ToString() == "Yes")
-                    {
-                        Dao.DeleteRecord(ItemData, itemName);
-                        return retVal;
-                    }
+             
+                var itemName = ItemData.Rows[selections]["ItemName"].ToString();
+                var deleteDecision = MessageBox.Show($"Would you like to remove item {itemName}?", "Delete item?", MessageBoxButtons.YesNo);
+
+                if (deleteDecision.ToString() == "Yes")
+                {
+                    Dao.DeleteRecord(ItemData, selections);
+                    return retVal;
                 }
+                
+            }
+            catch (Exception)
+            {
+                retVal = false;
+            }
+            return retVal;
+        }
+        internal bool UpdateTableItem()
+        {
+            bool retVal = true;
+
+            try
+            {
+                
+                var selections = dataGridView1.CurrentCell.RowIndex;
+
+                ListModel model = new ListModel()
+                {   
+                    ItemName = ItemData.Rows[selections]["ItemName"].ToString(),
+                    ItemPrice = Convert.ToDecimal(ItemData.Rows[selections]["ItemPrice"].ToString()),
+                    ItemQuantity = Convert.ToInt16(ItemData.Rows[selections]["Quantity"].ToString()),
+                };
+
+                using(var formPupup = new UpdateItems(model))
+                {
+                    formPupup.ShowDialog();
+                    model = formPupup.UpdateRowData();
+                    Dao.UpdateRecord(ItemData, model, selections);
+                }
+
+             
+                
+
+                //foreach (DataRow row in ItemData.Rows)
+                //{
+                //    var itemName = row["ItemName"].ToString();
+                //    var deleteDecision = MessageBox.Show($"Would you like to remove item {itemName}?", "Delete item?", MessageBoxButtons.YesNo);
+
+                //    if (deleteDecision.ToString() == "Yes")
+                //    {
+                //        Dao.DeleteRecord(ItemData, itemName);
+                //        return retVal;
+                //    }
+                //}
             }
             catch (Exception)
             {

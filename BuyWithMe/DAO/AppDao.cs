@@ -14,8 +14,8 @@ namespace BuyWithMe.DAO
     {
         DataTable CreateDataTable();
         bool AddRecord(DataTable dt, ListModel model);
-        void UpdateRecord();
-        void DeleteRecord(DataTable dt, string value);
+        void UpdateRecord(DataTable dt, ListModel model, int row);
+        void DeleteRecord(DataTable dt, int row);
         void DeleteAllRecords();
 
 
@@ -31,7 +31,6 @@ namespace BuyWithMe.DAO
             dataTable.Columns.Add("ItemName", typeof(string));
             dataTable.Columns.Add("ItemPrice", typeof(decimal));
             dataTable.Columns.Add("Quantity", typeof(short));
-            dataTable.Columns.Add("Taxeble", typeof(string));
 
             return dataTable;
         }
@@ -44,7 +43,6 @@ namespace BuyWithMe.DAO
                 row["ItemName"] = model.ItemName;
                 row["ItemPrice"] = model.ItemPrice;
                 row["Quantity"] = model.ItemQuantity;
-                row["Taxeble"] = model.Taxable ? "Yes" : "No";
                 dt.Rows.Add(row);
 
                 return true;
@@ -56,21 +54,20 @@ namespace BuyWithMe.DAO
       
         }
 
-        public void UpdateRecord()
+        public void UpdateRecord(DataTable dt, ListModel model, int row)
         {
-
+            dt.Rows[row]["ItemName"] = model.ItemName;
+            dt.Rows[row]["ItemPrice"] = model.ItemPrice;
+            dt.Rows[row]["Quantity"] = model.ItemQuantity;
+            dt.AcceptChanges();          
         }
-        public void DeleteRecord(DataTable dt, string value)
+
+
+        public void DeleteRecord(DataTable dt, int row)
         {
-            for (int i = dt.Rows.Count -1; i>= 0; i--)
-            {
-                var dr = dt.Rows[i];
-                if (dr["ItemName"].ToString() == value.ToString())
-                {
-                    dr.Delete();
-                    dt.AcceptChanges();
-                }
-            }
+            dt.Rows[row].Delete();
+            dt.AcceptChanges();
+          
         }
 
         public void DeleteAllRecords()
