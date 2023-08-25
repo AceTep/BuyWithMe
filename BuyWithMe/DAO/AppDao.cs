@@ -1,19 +1,21 @@
-﻿using System;
+﻿using BuyWithMe.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
- namespace BuyWithMe.DAO
+namespace BuyWithMe.DAO
 {
 
     public interface IAppDao
     {
         DataTable CreateDataTable();
-        void AddRecord();
+        bool AddRecord(DataTable dt, ListModel model);
         void UpdateRecord();
-        void DeleteRecord();
+        void DeleteRecord(DataTable dt, string value);
         void DeleteAllRecords();
 
 
@@ -29,23 +31,46 @@ using System.Threading.Tasks;
             dataTable.Columns.Add("ItemName", typeof(string));
             dataTable.Columns.Add("ItemPrice", typeof(decimal));
             dataTable.Columns.Add("Quantity", typeof(short));
-            dataTable.Columns.Add("Taxeble", typeof(bool));
+            dataTable.Columns.Add("Taxeble", typeof(string));
 
             return dataTable;
         }
 
-        public void AddRecord()
+        public bool AddRecord(DataTable dt, ListModel model)
         {
+            try
+            {
+                DataRow row = dt.NewRow();
+                row["ItemName"] = model.ItemName;
+                row["ItemPrice"] = model.ItemPrice;
+                row["Quantity"] = model.ItemQuantity;
+                row["Taxeble"] = model.Taxable ? "Yes" : "No";
+                dt.Rows.Add(row);
 
+                return true;
+            }
+            catch (Exception) 
+            { 
+                return false; 
+            }
+      
         }
 
         public void UpdateRecord()
         {
 
         }
-        public void DeleteRecord()
+        public void DeleteRecord(DataTable dt, string value)
         {
-
+            for (int i = dt.Rows.Count -1; i>= 0; i--)
+            {
+                var dr = dt.Rows[i];
+                if (dr["ItemName"].ToString() == value.ToString())
+                {
+                    dr.Delete();
+                    dt.AcceptChanges();
+                }
+            }
         }
 
         public void DeleteAllRecords()

@@ -1,7 +1,9 @@
 ﻿using BuyWithMe.DAO;
+using BuyWithMe.Models;
 using System;
 using System.Data;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace BuyWithMe
@@ -28,19 +30,17 @@ namespace BuyWithMe
         #region Event Handlers
         private void MainForm_Load(object sender, EventArgs e)
         {
+    
             Initialize();
         }
 
         private void addButton_Click(object sender, EventArgs e)
         {
-
-            //TODO - at the end of all the code above
-            Initialize();
+            AddItems();
         }
         private void removeButton_Click(object sender, EventArgs e)
         {
-            //TODO - at the end of all the code above
-            Dao.DeleteRecord();
+            RemoveAnItem();
         }
 
         private void updateButton_Click(object sender, EventArgs e)
@@ -77,12 +77,7 @@ namespace BuyWithMe
 
 
 
-
-
-
-
-
-
+        #region unused
 
         private void panel3_Paint(object sender, PaintEventArgs e)
         {
@@ -118,10 +113,10 @@ namespace BuyWithMe
         {
 
         }
-     
+
+        #endregion
 
 
-     
         #endregion
 
 
@@ -130,11 +125,99 @@ namespace BuyWithMe
         private void Initialize() {
             ItemName.Text = "Enter Item";
             ItemPrice.Text = "0.00";
-            Quantity.Text = "0";
+            ItemQuantity.Text = "0";
             taxeble.Checked = false;
         }
 
+        private  bool AddItems()
+        {
+            try
+            {
+                var model = new ListModel();
+                Regex rx = new Regex("[^A-Za-z0-9\\ ]");
 
+
+                #region Validation
+
+                //validation on item name
+                if (!rx.IsMatch(ItemName.Text))
+                {
+                    model.ItemName = ItemName.Text;
+                }
+                else
+                {
+                    MessageBox.Show("You can not have special Characters. Please try again.");
+                    return false;
+                }
+
+                //validation on item quantity
+                if (short.TryParse(ItemQuantity.Text, out short quantity))
+                {
+                    model.ItemQuantity = quantity;
+                }
+                else
+                {
+                    MessageBox.Show("You must enter a valid quantity. Please try again.");
+                    return false;
+                }
+
+                //validation on item price
+                if (decimal.TryParse(ItemPrice.Text, out decimal price))
+                {
+                    model.ItemPrice = price * quantity;
+                }
+                else
+                {
+                    MessageBox.Show("You must enter a decimal value (e.g., 1.75). Please try again.");
+                    return false;
+                }
+
+                //taxeble?
+
+                model.Taxable = taxeble.Checked;
+
+
+                #endregion
+
+                Dao.AddRecord(ItemData,model);
+                dataGridView1.DataSource = ItemData;
+                Initialize();
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There was a problem adding the record to the table: "+ex.Message);
+                return false;
+            }
+        }
+
+        private bool RemoveAnItem()
+        {
+            bool retVal = true;
+
+            try
+            {
+                foreach (DataRow row in ItemData.Rows)
+                {
+                    var itemName = row["ItemName"].ToString();
+                    var deleteDecision = MessageBox.Show($"Would you like to remove item {itemName}?", "Delete item?", MessageBoxButtons.YesNo);
+
+                    if (deleteDecision.ToString() == "Yes")
+                    {
+                        Dao.DeleteRecord(ItemData, itemName);
+                        return retVal;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                retVal = false;            
+            }
+            return retVal;
+           
+        }
 
         #endregion
 
