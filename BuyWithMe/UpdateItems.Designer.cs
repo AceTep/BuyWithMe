@@ -56,7 +56,7 @@
             // updateButton
             // 
             this.updateButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.updateButton.Location = new System.Drawing.Point(26, 156);
+            this.updateButton.Location = new System.Drawing.Point(27, 156);
             this.updateButton.Name = "updateButton";
             this.updateButton.Size = new System.Drawing.Size(345, 60);
             this.updateButton.TabIndex = 10;

@@ -12,6 +12,8 @@ namespace BuyWithMe
     {
         public static IAppDao Dao;
         public static DataTable ItemData;
+        public ListModel model;
+        public InsertModel insertModel;
 
         #region Constructords
         public MainForm()
@@ -36,7 +38,7 @@ namespace BuyWithMe
 
         private void addButton_Click(object sender, EventArgs e)
         {
-            AddItems();
+           AddItems();
         }
         private void removeButton_Click(object sender, EventArgs e)
         {
@@ -50,8 +52,11 @@ namespace BuyWithMe
 
         private void loadList_Click(object sender, EventArgs e)
         {
-
+            AddServerItems();
         }
+
+
+
 
         private void saveList_Click(object sender, EventArgs e)
         {
@@ -189,6 +194,35 @@ namespace BuyWithMe
                 return false;
             }
         }
+        internal bool AddServerItems()
+        {
+            try
+            {
+
+                var listRows = Dao.GetListRows();
+                GetListsModel retModel;
+
+                using (var listFormPop = new DisplayExistingLists(listRows))
+                {
+                    listFormPop.ShowDialog();
+                    retModel = listFormPop.retModel;
+                }
+                var items = Dao.GetListItems(retModel);
+            
+                Dao.AddSQLRecords(ItemData, items);
+              
+                dataGridView1.DataSource = ItemData;
+                Initialize();
+
+                return true;
+
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("There was a problem adding the record to the table: " + ex.Message);
+                return false;
+            }
+        }
 
         internal bool RemoveAnItem()
         {
@@ -231,10 +265,10 @@ namespace BuyWithMe
                     ItemQuantity = Convert.ToInt16(ItemData.Rows[selections]["Quantity"].ToString()),
                 };
 
-                using(var formPupup = new UpdateItems(model))
+                using(var formPop = new UpdateItems(model))
                 {
-                    formPupup.ShowDialog();
-                    model = formPupup.UpdateRowData();
+                    formPop.ShowDialog();
+                    model = formPop.UpdateRowData();
                     Dao.UpdateRecord(ItemData, model, selections);
                 }
 
