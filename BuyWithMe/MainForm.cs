@@ -10,7 +10,7 @@ namespace BuyWithMe
     public partial class MainForm : Form
     {
         public static DataTable ItemData;
-        SqlConnection con = new SqlConnection("Data Source=MATEO-DELL;Initial Catalog=BuyWithMe1;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+        SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\DemoDatabase1.mdf;Integrated Security=True");
 
 
         #region Constructords
@@ -120,7 +120,7 @@ namespace BuyWithMe
             //initilizing data
 
 
-            SqlCommand command = new SqlCommand("select ItemName,ItemPrice,ItemQuantity from ShoppingLists ORDER BY ID", con);
+            SqlCommand command = new SqlCommand("select ItemName,ItemPrice,ItemQuantity, TotalPrice from ShoppingLists ORDER BY ID", con);
             SqlDataAdapter adapter = new SqlDataAdapter(command);
             DataTable dt = new DataTable();
             adapter.Fill(dt);
@@ -134,7 +134,7 @@ namespace BuyWithMe
 
 
             // Using ExecuteScalar to get the sum of item prices
-            SqlCommand itemPrice = new SqlCommand("select sum([ItemPrice]) from [dbo].[ShoppingLists]", con);
+            SqlCommand itemPrice = new SqlCommand("select sum([TotalPrice]) from [dbo].[ShoppingLists]", con);
             object priceResult = itemPrice.ExecuteScalar();
 
             decimal Price;
@@ -166,7 +166,7 @@ namespace BuyWithMe
             TotalPrice.Text = Price.ToString("N2"); // Formatting price as a decimal
             con.Close();
         }
-    
+
 
 
 
@@ -177,7 +177,6 @@ namespace BuyWithMe
             {
                 var model = new ListModel();
                 Regex rx = new Regex("[^A-Za-z0-9\\ ]");
-
 
                 #region Validation
 
@@ -206,7 +205,7 @@ namespace BuyWithMe
                 //validation on item price
                 if (decimal.TryParse(ItemPrice.Text, out decimal price))
                 {
-                    model.ItemPrice = price * quantity;
+                    model.ItemPrice = price;
                 }
                 else
                 {
@@ -215,15 +214,25 @@ namespace BuyWithMe
                 }
 
                 #endregion
+                model.TotalPrice = model.ItemPrice * model.ItemQuantity; // Calculate TotalPrice
 
-                con.Open();
-                SqlCommand command = new SqlCommand("insert into ShoppingLists values('" + model.ItemName + "','" + decimal.Parse(model.ItemPrice.ToString())+ "','" + model.ItemQuantity + "')", con);
-                command.ExecuteNonQuery();
-                con.Close();
-                LoadData();
-                Initialize();
+                using (SqlConnection con = new SqlConnection("Data Source=(LocalDB)\\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\\DemoDatabase1.mdf;Integrated Security=True"))
+                {
+                    con.Open();
+
+                    SqlCommand command = new SqlCommand("INSERT INTO ShoppingLists (ItemName, ItemPrice, ItemQuantity, TotalPrice) VALUES (@ItemName, @ItemPrice, @ItemQuantity, @TotalPrice)", con);
+                    command.Parameters.AddWithValue("@ItemName", model.ItemName);
+                    command.Parameters.AddWithValue("@ItemPrice", model.ItemPrice);
+                    command.Parameters.AddWithValue("@ItemQuantity", model.ItemQuantity);
+                    command.Parameters.AddWithValue("@TotalPrice", model.TotalPrice);
+
+                    command.ExecuteNonQuery();
+
+                    LoadData();
+                    Initialize();
+                }
+
                 return true;
-
             }
             catch (Exception ex)
             {
@@ -238,6 +247,7 @@ namespace BuyWithMe
             SqlCommand command = new SqlCommand("delete from ShoppingLists where  ItemName= '" + ItemName.Text + "'", con);
             command.ExecuteNonQuery();
             con.Close();
+            LoadData();
             Initialize();
         }
         private void EmptyBin()
@@ -246,16 +256,19 @@ namespace BuyWithMe
             SqlCommand command = new SqlCommand("delete from ShoppingLists", con);
             command.ExecuteNonQuery();
             con.Close();
+            LoadData();
             Initialize();
         }
         private void UpdateTableItem()
         {
             con.Open();
             SqlCommand command = new SqlCommand("update ShoppingLists set ItemName='" + ItemName.Text + "',ItemPrice='" + decimal.Parse(ItemPrice.Text) +
-                "',ItemQuantity='" + int.Parse(ItemQuantity.Text) + "' where ItemName= '" + ItemName.Text + "'", con);
+                "',ItemQuantity='" + int.Parse(ItemQuantity.Text) + "',TotalPrice='"+(int.Parse(ItemQuantity.Text)* decimal.Parse(ItemPrice.Text)) +"' where ItemName= '" + ItemName.Text + "'", con);
             command.ExecuteNonQuery();
             con.Close();
+            LoadData();
             Initialize();
+
         }
 
         #endregion
