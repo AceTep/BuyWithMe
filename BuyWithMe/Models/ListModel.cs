@@ -11,6 +11,6 @@ namespace BuyWithMe.Models
         public string ItemName{ get; set; }
         public decimal ItemPrice { get; set; }
         public short ItemQuantity { get; set; }
-        public bool Taxable { get; set; }
+        public decimal TotalPrice { get; set; }
     }
 }
