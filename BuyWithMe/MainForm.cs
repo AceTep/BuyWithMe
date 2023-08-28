@@ -1,8 +1,7 @@
-﻿using BuyWithMe.DAO;
-using BuyWithMe.Models;
+﻿using BuyWithMe.Models;
 using System;
 using System.Data;
-using System.Runtime.CompilerServices;
+using System.Data.SqlClient;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -10,8 +9,9 @@ namespace BuyWithMe
 {
     public partial class MainForm : Form
     {
-        public static IAppDao Dao;
         public static DataTable ItemData;
+        SqlConnection con = new SqlConnection("Data Source=MATEO-DELL;Initial Catalog=BuyWithMe1;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+
 
         #region Constructords
         public MainForm()
@@ -19,21 +19,14 @@ namespace BuyWithMe
             InitializeComponent();
         }
 
-        static MainForm()
-        {
-            Dao = new AppDao();
-            ItemData = Dao.CreateDataTable();
-        }
-
         #endregion
 
         #region Event Handlers
         private void MainForm_Load(object sender, EventArgs e)
         {
-    
+            LoadData();
             Initialize();
         }
-
         private void addButton_Click(object sender, EventArgs e)
         {
             AddItems();
@@ -42,26 +35,21 @@ namespace BuyWithMe
         {
             RemoveAnItem();
         }
-
         private void updateButton_Click(object sender, EventArgs e)
         {
-          UpdateTableItem();
+            UpdateTableItem();
         }
-
-        private void loadList_Click(object sender, EventArgs e)
+        private void DeleteEverything_Click(object sender, EventArgs e)
         {
+            var selection = MessageBox.Show("Do you want to Empty Shopping Cart?", "Empty Cart", MessageBoxButtons.YesNo);
 
+            if (selection.ToString() == "Yes")
+            {
+                EmptyBin();
+            }
+            else
+            { return; }
         }
-
-        private void saveList_Click(object sender, EventArgs e)
-        {
-
-        }
-        private void shareList_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void closeForm_Click(object sender, EventArgs e)
         {
             var selection = MessageBox.Show("Do you want to exit?", "Exit BuyWithMe", MessageBoxButtons.YesNo);
@@ -69,15 +57,16 @@ namespace BuyWithMe
             if (selection.ToString() == "Yes")
             {
                 this.Close();
-            }
+
+                         }
             else
             { return; }
         }
-
-
-
         #region unused
+        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
 
+        }
         private void panel3_Paint(object sender, PaintEventArgs e)
         {
 
@@ -121,13 +110,68 @@ namespace BuyWithMe
 
         #region Worker Methods
 
-        internal void Initialize() {
+        internal void Initialize()
+        {
+            //filling empty text box
             ItemName.Text = "Enter Item";
             ItemPrice.Text = "0.00";
             ItemQuantity.Text = "0";
+
+            //initilizing data
+
+
+            SqlCommand command = new SqlCommand("select ItemName,ItemPrice,ItemQuantity from ShoppingLists ORDER BY ID", con);
+            SqlDataAdapter adapter = new SqlDataAdapter(command);
+            DataTable dt = new DataTable();
+            adapter.Fill(dt);
+
+            dataGridView1.DataSource = dt;
         }
 
-        internal  bool AddItems()
+        internal void LoadData()
+        {
+            con.Open();
+
+
+            // Using ExecuteScalar to get the sum of item prices
+            SqlCommand itemPrice = new SqlCommand("select sum([ItemPrice]) from [dbo].[ShoppingLists]", con);
+            object priceResult = itemPrice.ExecuteScalar();
+
+            decimal Price;
+
+            if (priceResult != DBNull.Value && decimal.TryParse(priceResult.ToString(), out decimal price))
+            {
+                Price = price;
+            }
+            else
+            {
+                Price = 0.00m; // Default value when result is DBNull or parsing fails
+            }
+
+            // Using ExecuteScalar to get the sum of item quantities
+            SqlCommand itemQuantity = new SqlCommand("select SUM([ItemQuantity]) from ShoppingLists", con);
+            object quantityResult = itemQuantity.ExecuteScalar();
+
+            int Quantity;
+
+            if (quantityResult != DBNull.Value && int.TryParse(quantityResult.ToString(), out int quantity))
+            {
+                Quantity = quantity;
+            }
+            else
+            {
+                Quantity = 0; // Default value when result is DBNull or parsing fails
+            }
+            TotalItems.Text = Quantity.ToString();
+            TotalPrice.Text = Price.ToString("N2"); // Formatting price as a decimal
+            con.Close();
+        }
+    
+
+
+
+
+        internal bool AddItems()
         {
             try
             {
@@ -170,98 +214,54 @@ namespace BuyWithMe
                     return false;
                 }
 
-                //taxeble?
-
-
-
                 #endregion
 
-                Dao.AddRecord(ItemData,model);
-                dataGridView1.DataSource = ItemData;
+                con.Open();
+                SqlCommand command = new SqlCommand("insert into ShoppingLists values('" + model.ItemName + "','" + decimal.Parse(model.ItemPrice.ToString())+ "','" + model.ItemQuantity + "')", con);
+                command.ExecuteNonQuery();
+                con.Close();
+                LoadData();
                 Initialize();
-
                 return true;
 
             }
             catch (Exception ex)
             {
-                MessageBox.Show("There was a problem adding the record to the table: "+ex.Message);
+                MessageBox.Show("There was a problem adding the record to the table: " + ex.Message);
                 return false;
             }
         }
 
-        internal bool RemoveAnItem()
+        private void RemoveAnItem()
         {
-            bool retVal = true;
-
-            try
-            {
-                var selections = dataGridView1.CurrentCell.RowIndex;
-
-             
-                var itemName = ItemData.Rows[selections]["ItemName"].ToString();
-                var deleteDecision = MessageBox.Show($"Would you like to remove item {itemName}?", "Delete item?", MessageBoxButtons.YesNo);
-
-                if (deleteDecision.ToString() == "Yes")
-                {
-                    Dao.DeleteRecord(ItemData, selections);
-                    return retVal;
-                }
-                
-            }
-            catch (Exception)
-            {
-                retVal = false;
-            }
-            return retVal;
+            con.Open();
+            SqlCommand command = new SqlCommand("delete from ShoppingLists where  ItemName= '" + ItemName.Text + "'", con);
+            command.ExecuteNonQuery();
+            con.Close();
+            Initialize();
         }
-        internal bool UpdateTableItem()
+        private void EmptyBin()
+        { 
+            con.Open();
+            SqlCommand command = new SqlCommand("delete from ShoppingLists", con);
+            command.ExecuteNonQuery();
+            con.Close();
+            Initialize();
+        }
+        private void UpdateTableItem()
         {
-            bool retVal = true;
-
-            try
-            {
-                
-                var selections = dataGridView1.CurrentCell.RowIndex;
-
-                ListModel model = new ListModel()
-                {   
-                    ItemName = ItemData.Rows[selections]["ItemName"].ToString(),
-                    ItemPrice = Convert.ToDecimal(ItemData.Rows[selections]["ItemPrice"].ToString()),
-                    ItemQuantity = Convert.ToInt16(ItemData.Rows[selections]["Quantity"].ToString()),
-                };
-
-                using(var formPupup = new UpdateItems(model))
-                {
-                    formPupup.ShowDialog();
-                    model = formPupup.UpdateRowData();
-                    Dao.UpdateRecord(ItemData, model, selections);
-                }
-
-             
-                
-
-                //foreach (DataRow row in ItemData.Rows)
-                //{
-                //    var itemName = row["ItemName"].ToString();
-                //    var deleteDecision = MessageBox.Show($"Would you like to remove item {itemName}?", "Delete item?", MessageBoxButtons.YesNo);
-
-                //    if (deleteDecision.ToString() == "Yes")
-                //    {
-                //        Dao.DeleteRecord(ItemData, itemName);
-                //        return retVal;
-                //    }
-                //}
-            }
-            catch (Exception)
-            {
-                retVal = false;            
-            }
-            return retVal;
-           
+            con.Open();
+            SqlCommand command = new SqlCommand("update ShoppingLists set ItemName='" + ItemName.Text + "',ItemPrice='" + decimal.Parse(ItemPrice.Text) +
+                "',ItemQuantity='" + int.Parse(ItemQuantity.Text) + "' where ItemName= '" + ItemName.Text + "'", con);
+            command.ExecuteNonQuery();
+            con.Close();
+            Initialize();
         }
 
         #endregion
+
+   
+
 
     }
 }
